@@ -15,7 +15,7 @@ KOL Brand Hub is built as an MVP (Minimum Viable Product) to help Taiwanese infl
 - **Frontend:** Next.js 16 (App Router) with TypeScript
 - **Styling:** Tailwind CSS v4
 - **Deployment:** Vercel (Free Tier)
-- **Database & Auth:** Supabase (Free Tier) - *To be integrated*
+- **Database & Auth:** Supabase (Free Tier) - *Integrated*
 
 ## Getting Started
 
@@ -41,7 +41,20 @@ yarn install
 pnpm install
 ```
 
-3. Run the development server:
+3. Set up environment variables:
+   - Create a `.env.local` file in the root directory
+   - Copy the contents from `env.example` to `.env.local`
+   - Get your Supabase credentials:
+     1. Go to [Supabase](https://app.supabase.com) and create a new project (or use an existing one)
+     2. Navigate to Project Settings → API
+     3. Copy your `Project URL` and `anon` `public` key
+     4. Paste them into `.env.local`:
+        ```
+        NEXT_PUBLIC_SUPABASE_URL=your_project_url
+        NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+        ```
+
+4. Run the development server:
 ```bash
 npm run dev
 # or
@@ -50,7 +63,7 @@ yarn dev
 pnpm dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
 ## Project Structure
 
@@ -62,23 +75,43 @@ app/
 ├── introduction/         # Introduction page
 ├── pricing/              # Pricing page
 ├── tutorial/             # Tutorial page
-├── login/                # Login page
-└── signup/               # Sign up page
+├── login/                # Login page (with Supabase auth)
+├── signup/               # Sign up page (with Supabase auth)
+├── dashboard/            # User dashboard (protected)
+└── auth/
+    ├── callback/         # OAuth callback route
+    └── logout/          # Logout route
+components/
+└── Navigation.tsx       # Reusable navigation component with auth state
+lib/
+└── supabase/
+    ├── client.ts         # Browser Supabase client
+    └── server.ts         # Server Supabase client
 ```
 
 ## Features (Current Status)
 
-### ✅ Completed (Sprint 0 - Landing Page)
-- Landing page with hero section
-- Navigation bar with routing
-- Footer with links
-- Responsive design with dark mode support
-- Placeholder pages for Introduction, Pricing, Tutorial, Login, and Signup
+### ✅ Completed
+- **Sprint 0 - Landing Page**
+  - Landing page with hero section
+  - Navigation bar with routing
+  - Footer with links
+  - Responsive design with dark mode support
+  - Placeholder pages for Introduction, Pricing, Tutorial
+
+- **Sprint 1 - Authentication (Partial)**
+  - Supabase integration and configuration
+  - User login with email/password
+  - User signup with email/password
+  - OAuth login with Google and Facebook (UI ready, providers to be configured)
+  - Protected dashboard route
+  - Logout functionality
+  - Form validation and error handling
+  - Dynamic navigation based on authentication state
+  - Reusable Navigation component with conditional rendering
 
 ### 🚧 In Progress
-- Supabase integration (Database & Auth)
-- User authentication system
-- Dashboard for influencers
+- User profile management
 - Link-in-Bio management
 - Personal store management
 
@@ -100,6 +133,14 @@ The easiest way to deploy this Next.js app is using the [Vercel Platform](https:
 3. Vercel will automatically detect Next.js and configure the deployment
 
 For more details, check the [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying).
+
+## OAuth Configuration
+
+The application supports OAuth login with Google and Facebook. To enable these providers:
+
+1. See `OAUTH_SETUP.md` for detailed setup instructions
+2. Configure OAuth providers in your Supabase dashboard
+3. Add OAuth credentials to Supabase Authentication settings
 
 ## License
 
